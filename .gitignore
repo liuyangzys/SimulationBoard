@@ -1,0 +1,47 @@
+﻿# Object files
+*.o
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+#KEIL的过程文件
+*.crf
+*.o
+*.d
+*.axf
+*.htm
+*.lnp
+*.sct
+*.dep
+*.bin
+*.hex
+*.lst
+*.map
+*.uvguix.*
+*.dbgconf
+*.TMP
+*.elf
+OutPut/
+
+# vscode,vim等杂项
+*.docx
+.vscode/
+*.swp
+*.pdf
+*.vim
+
+#ctags
+tags
+
