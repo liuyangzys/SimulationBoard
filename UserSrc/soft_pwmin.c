@@ -1,17 +1,19 @@
-#include "tim.h"
 #include "soft_pwmin.h"
+#include "tim.h"
 
 /* pwm 周期 */
 uint32_t _PwmPeriod[16] = {0};
 /* pwm 高电平时间 */
 uint32_t _PwmHighLevelPeriod[16] = {0};
 
+static uint8_t _PwmICpolarity[16] = {0};
+
 static uint32_t _PwmHighLevelTime[16] = {0};
 static uint32_t _PwmLowLevelTime[16] = {0};
 
 /**
  * @brief pwm 输入捕获配置
- * 
+ *
  */
 void PwmCapture_Config(void)
 {
@@ -40,15 +42,12 @@ void PwmCapture_Config(void)
 
 /**
  * @brief 定时器输入捕获回调函数
- * 
- * @param htim 
+ *
+ * @param htim
  */
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-    GPIO_TypeDef *GPIOx = 0;
-    uint16_t GPIO_PIN_x = 0;
-    uint8_t index = 0;
-
+    PwmCHType pwm_ch = PWM_CH0;
     uint32_t Channelx = 0;
 
     if (htim->Instance == TIM1)
@@ -56,10 +55,9 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         switch (htim->Channel)
         {
         case HAL_TIM_ACTIVE_CHANNEL_1:
-            GPIOx = GPIOA;
-            GPIO_PIN_x = GPIO_PIN_8;
+
             Channelx = TIM_CHANNEL_1;
-            index = 0;
+            pwm_ch = PWM_CH15;
             break;
 
         default:
@@ -71,30 +69,22 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         switch (htim->Channel)
         {
         case HAL_TIM_ACTIVE_CHANNEL_1:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_10;
-            index = 1;
+            pwm_ch = PWM_CH0;
             Channelx = TIM_CHANNEL_1;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_2:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_11;
-            index = 2;
+            pwm_ch = PWM_CH1;
             Channelx = TIM_CHANNEL_2;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_3:
-            GPIOx = GPIOA;
-            GPIO_PIN_x = GPIO_PIN_15;
-            index = 3;
+            pwm_ch = PWM_CH10;
             Channelx = TIM_CHANNEL_3;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_4:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_3;
-            index = 4;
+            pwm_ch = PWM_CH11;
             Channelx = TIM_CHANNEL_4;
             break;
 
@@ -107,30 +97,22 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         switch (htim->Channel)
         {
         case HAL_TIM_ACTIVE_CHANNEL_1:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_0;
-            index = 5;
+            pwm_ch = PWM_CH2;
             Channelx = TIM_CHANNEL_1;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_2:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_1;
-            index = 6;
+            pwm_ch = PWM_CH3;
             Channelx = TIM_CHANNEL_2;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_3:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_4;
-            index = 7;
+            pwm_ch = PWM_CH8;
             Channelx = TIM_CHANNEL_3;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_4:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_5;
-            index = 8;
+            pwm_ch = PWM_CH9;
             Channelx = TIM_CHANNEL_4;
             break;
 
@@ -143,30 +125,22 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         switch (htim->Channel)
         {
         case HAL_TIM_ACTIVE_CHANNEL_1:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_6;
-            index = 9;
+            pwm_ch = PWM_CH4;
             Channelx = TIM_CHANNEL_1;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_2:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_7;
-            index = 10;
+            pwm_ch = PWM_CH5;
             Channelx = TIM_CHANNEL_2;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_3:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_8;
-            index = 11;
+            pwm_ch = PWM_CH6;
             Channelx = TIM_CHANNEL_3;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_4:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_9;
-            index = 12;
+            pwm_ch = PWM_CH7;
             Channelx = TIM_CHANNEL_4;
             break;
 
@@ -179,16 +153,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         switch (htim->Channel)
         {
         case HAL_TIM_ACTIVE_CHANNEL_3:
-            GPIOx = GPIOC;
-            GPIO_PIN_x = GPIO_PIN_8;
-            index = 13;
+            pwm_ch = PWM_CH13;
             Channelx = TIM_CHANNEL_3;
             break;
 
         case HAL_TIM_ACTIVE_CHANNEL_4:
-            GPIOx = GPIOC;
-            GPIO_PIN_x = GPIO_PIN_9;
-            index = 14;
+            pwm_ch = PWM_CH14;
             Channelx = TIM_CHANNEL_4;
             break;
 
@@ -201,9 +171,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         switch (htim->Channel)
         {
         case HAL_TIM_ACTIVE_CHANNEL_2:
-            GPIOx = GPIOB;
-            GPIO_PIN_x = GPIO_PIN_15;
-            index = 15;
+            pwm_ch = PWM_CH12;
             Channelx = TIM_CHANNEL_2;
             break;
 
@@ -212,31 +180,51 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         }
     }
 
-    if (GPIOx)
+    if (_PwmICpolarity[pwm_ch] == 0)
     {
-        switch (HAL_GPIO_ReadPin(GPIOx, GPIO_PIN_x))
-        {
-        case GPIO_PIN_SET:
-        {
-            uint32_t highLevelTime = HAL_TIM_ReadCapturedValue(htim, Channelx);
-            if (highLevelTime > _PwmHighLevelTime[index])
-            {
-                _PwmPeriod[index] = highLevelTime - _PwmHighLevelTime[index];
-            }
-            _PwmHighLevelTime[index] = highLevelTime;
-        }
-        break;
+        uint32_t time = HAL_TIM_ReadCapturedValue(htim, Channelx);
 
-        case GPIO_PIN_RESET:
-            _PwmLowLevelTime[index] = HAL_TIM_ReadCapturedValue(htim, Channelx);
-            if (_PwmLowLevelTime[index] > _PwmHighLevelTime[index])
-            {
-                _PwmHighLevelPeriod[index] = _PwmLowLevelTime[index] - _PwmHighLevelTime[index];
-            }
-            break;
-
-        default:
-            break;
+        if (time > _PwmHighLevelTime[pwm_ch])
+        {
+            _PwmPeriod[pwm_ch] = time - _PwmHighLevelTime[pwm_ch];
         }
+        _PwmHighLevelTime[pwm_ch] = time;
+
+        _PwmICpolarity[pwm_ch] = 1;
+        __HAL_TIM_SET_CAPTUREPOLARITY(htim, Channelx,
+                                      TIM_INPUTCHANNELPOLARITY_FALLING);
     }
+    else
+    {
+        _PwmLowLevelTime[pwm_ch] = HAL_TIM_ReadCapturedValue(htim, Channelx);
+        if (_PwmLowLevelTime[pwm_ch] > _PwmHighLevelTime[pwm_ch])
+        {
+            _PwmHighLevelPeriod[pwm_ch] =
+                _PwmLowLevelTime[pwm_ch] - _PwmHighLevelTime[pwm_ch];
+        }
+
+        _PwmICpolarity[pwm_ch] = 0;
+        __HAL_TIM_SET_CAPTUREPOLARITY(htim, Channelx,
+                                      TIM_INPUTCHANNELPOLARITY_RISING);
+    }
+}
+
+/**
+ * @brief 获取各通道的周期
+ * 
+ * @return uint32_t* 各通道周期数据指针
+ */
+uint32_t* Pwm_GetPeriod(void)
+{
+    return _PwmPeriod;
+}
+
+/**
+ * @brief 获取各通道的高电平时间
+ * 
+ * @return uint32_t* 各通道高电平时间数据指针
+ */
+uint32_t* Pwm_GetHighLevelPeriod(void)
+{
+    return _PwmHighLevelPeriod;
 }

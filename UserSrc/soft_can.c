@@ -7,19 +7,21 @@
  */
 void CAN_Bus_FilterConfig(void)
 {
-    CAN_FilterTypeDef sFilter;
-    sFilter.FilterActivation = ENABLE;
-    sFilter.FilterBank = 0;
-    sFilter.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+   CAN_FilterTypeDef sFilterConfig;
+    sFilterConfig.FilterActivation = ENABLE;
+    sFilterConfig.FilterBank = 0;
+    sFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;
 
-    sFilter.FilterIdHigh = 0X00;
-    sFilter.FilterIdLow = 0X00;
-    sFilter.FilterMaskIdHigh = 0X00;
-    sFilter.FilterMaskIdLow = 0X00;
-    sFilter.FilterMode = CAN_FILTERMODE_IDMASK;
-    sFilter.FilterMode = CAN_FILTERSCALE_32BIT;
+    sFilterConfig.FilterIdHigh = (uint16_t)(0x0000 >> 16);
+    sFilterConfig.FilterIdLow =
+        (uint16_t)((0x0000 & 0x0000FFFF) | CAN_ID_EXT);
+    sFilterConfig.FilterMaskIdHigh = (uint16_t)(0x0000 >> 16);
+    sFilterConfig.FilterMaskIdLow = (uint16_t)(0x0000 & 0x0000FFFF);
 
-    if(HAL_CAN_ConfigFilter(&hcan1, &sFilter) != HAL_OK)
+    sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+    sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+
+    if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
     {
         Error_Handler();
     }
@@ -29,7 +31,8 @@ void CAN_Bus_FilterConfig(void)
         Error_Handler();
     }
 
-    if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+    if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) !=
+        HAL_OK)
     {
         Error_Handler();
     }
