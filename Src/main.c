@@ -33,6 +33,7 @@
 #include "soft_can.h"
 #include "soft_pwmin.h"
 #include "soft_adc.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -124,7 +125,9 @@ int main(void)
     uint8_t u4Tx[5] = {'u', 't', '4'};
     uint8_t u5Tx[5] = {'u', 't', '5'};
     uint8_t u6Tx[5] = {'u', 't', '6'};
-
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
+  delay_us(3000000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
