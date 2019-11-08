@@ -67,10 +67,10 @@ void HC595D_SendByte(uint8_t data)
 
         /* SHCP 线上产生一个上升沿 */
         HC595D_SetSHCP(GPIO_PIN_RESET);
-        delay_us(1);
+        delay_us(5);
         HC595D_SetSHCP(GPIO_PIN_SET);
 
-        data >> 1;
+        data = data >> 1;
     }
 }
 
@@ -81,7 +81,7 @@ void HC595D_SendByte(uint8_t data)
 void HC595D_CS(void)
 {
     HC595D_SetSTCP(GPIO_PIN_RESET);
-    delay_us(1);
+    delay_us(5);
     HC595D_SetSTCP(GPIO_PIN_SET);
 }
 

@@ -56,8 +56,22 @@ void GPIO_SetOutput(uint8_t out_ch, GPIO_PinState state)
 {
     if (out_ch < 4)
     {
-        hc595d_databyte = hc595d_databyte | (1 << out_ch);
-        HC595D_SendByte(hc595d_databyte);
-        HC595D_CS();
+        switch (state)
+        {
+        case GPIO_PIN_SET:
+            hc595d_databyte = hc595d_databyte | (1 << out_ch);
+            HC595D_SendByte(hc595d_databyte);
+            HC595D_CS();
+            break;
+
+        case GPIO_PIN_RESET:
+            hc595d_databyte &= ~(1 << out_ch);
+            HC595D_SendByte(hc595d_databyte);
+            HC595D_CS();
+            break;
+
+        default:
+            break;
+        }
     }
 }

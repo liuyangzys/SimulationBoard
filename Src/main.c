@@ -34,6 +34,7 @@
 #include "soft_pwmin.h"
 #include "soft_adc.h"
 #include "delay.h"
+#include "soft_gpio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -77,7 +78,6 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
-  
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -114,45 +114,41 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-    CAN_Bus_FilterConfig();
-    PwmCapture_Config();
-    Usart_Config();
-    ADC_Config();
-    static uint32_t lastUartSendTime = 0;
-    uint8_t u1Tx[5] = {'u', 't', '1'};
-    uint8_t u2Tx[5] = {'u', 't', '2'};
-    uint8_t u3Tx[5] = {'u', 't', '3'};
-    uint8_t u4Tx[5] = {'u', 't', '4'};
-    uint8_t u5Tx[5] = {'u', 't', '5'};
-    uint8_t u6Tx[5] = {'u', 't', '6'};
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
-  delay_us(3000000);
+  CAN_Bus_FilterConfig();
+  PwmCapture_Config();
+  Usart_Config();
+  ADC_Config();
+  static uint32_t lastUartSendTime = 0;
+  uint8_t u1Tx[5] = {'u', 't', '1'};
+  uint8_t u2Tx[5] = {'u', 't', '2'};
+  uint8_t u3Tx[5] = {'u', 't', '3'};
+  uint8_t u4Tx[5] = {'u', 't', '4'};
+  uint8_t u5Tx[5] = {'u', 't', '5'};
+  uint8_t u6Tx[5] = {'u', 't', '6'};
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    while (1)
+  while (1)
+  {
+    if (HAL_GetTick() - lastUartSendTime > 500)
     {
-        if (HAL_GetTick() - lastUartSendTime > 500)
-        {
-            lastUartSendTime = HAL_GetTick();
-            Usart_Dma_Transmit(USART1, u1Tx, 5);
-            Usart_Dma_Transmit(USART2, u2Tx, 5);
-            Usart_Dma_Transmit(USART3, u3Tx, 5);
-            Usart_Dma_Transmit(UART4, u4Tx, 5);
-            Usart_Dma_Transmit(UART5, u5Tx, 5);
-            Usart_Dma_Transmit(USART6, u6Tx, 5);
-        }
+      lastUartSendTime = HAL_GetTick();
+      GPIO_SetOutput(0, GPIO_PIN_SET);
+      GPIO_SetOutput(1, GPIO_PIN_SET);
+      GPIO_SetOutput(2, GPIO_PIN_SET);
+      GPIO_SetOutput(3, GPIO_PIN_SET);
+    }
 
-        CAN_Bus_Service();
+    CAN_Bus_Service();
 
-        ADC_VoltageUpdate();
+    ADC_VoltageUpdate();
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    }
+  }
   /* USER CODE END 3 */
 }
 
@@ -185,8 +181,7 @@ void SystemClock_Config(void)
   }
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -209,13 +204,13 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-    /* User can add his own implementation to report the HAL error return state
+  /* User can add his own implementation to report the HAL error return state
      */
 
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
@@ -224,9 +219,9 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
-    /* User can add his own implementation to report the file name and line
+  /* User can add his own implementation to report the file name and line
        number, tex: printf("Wrong parameters value: file %s on line %d\r\n",
        file, line) */
   /* USER CODE END 6 */
