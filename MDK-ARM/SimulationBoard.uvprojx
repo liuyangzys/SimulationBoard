@@ -469,6 +469,11 @@
               <FilePath>..\UserSrc\soft_can.c</FilePath>
             </File>
             <File>
+              <FileName>soft_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserSrc\soft_dac.c</FilePath>
+            </File>
+            <File>
               <FileName>soft_pwmin.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UserSrc\soft_pwmin.c</FilePath>
@@ -477,11 +482,6 @@
               <FileName>soft_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UserSrc\soft_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>soft_dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UserSrc\soft_dac.c</FilePath>
             </File>
             <File>
               <FileName>soft_gpio.c</FileName>

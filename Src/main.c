@@ -35,6 +35,7 @@
 #include "soft_can.h"
 #include "soft_gpio.h"
 #include "soft_pwmin.h"
+#include "soft_dac.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -120,13 +121,29 @@ int main(void)
     PwmCapture_Config();
     Usart_Config();
     ADC_Config();
-
+    DAC_InitConfig();
+    
+    uint32_t lastTime, count;
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
+        if(HAL_GetTick() - lastTime > 1000)
+        {
+            lastTime = HAL_GetTick();
+            DAC_SetCHVolt(0, 12.0F);
+            DAC_SetCHVolt(1, 15.0F);
+            DAC_SetCHVolt(2, 18.0F);
+            DAC_SetCHVolt(3, 20.0F);
+            HAL_Delay(5);
+            float volt;
+            volt = DAC_GetCHVolt(0);
+            volt = DAC_GetCHVolt(1);
+            volt = DAC_GetCHVolt(2);
+            volt = DAC_GetCHVolt(3);
+        }
         CAN_Bus_Service();
 
         ADC_VoltageUpdate();

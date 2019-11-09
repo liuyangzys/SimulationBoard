@@ -24,6 +24,13 @@ typedef struct
 
     void (*delay_us)(uint32_t ms);
 
+    uint32_t vref_mv;
+
 } AD5504_HandleType;
+
+void AD5504_SetAnalogVolt(AD5504_HandleType *hAD5504, AD5504_AnalogCH ch,
+                          float voltage);
+
+float AD5504_GetAnalogVolt(AD5504_HandleType *hAD5504, AD5504_AnalogCH ch);
 
 #endif
