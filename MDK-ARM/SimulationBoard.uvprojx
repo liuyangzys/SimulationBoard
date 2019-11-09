@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>3</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -414,6 +414,21 @@
               <FilePath>../Src/can.c</FilePath>
             </File>
             <File>
+              <FileName>driver_ad5504.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserSrc\driver_ad5504.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_74hc595d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserSrc\driver_74hc595d.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserSrc\delay.c</FilePath>
+            </File>
+            <File>
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/dma.c</FilePath>
@@ -462,6 +477,16 @@
               <FileName>soft_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UserSrc\soft_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>soft_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserSrc\soft_dac.c</FilePath>
+            </File>
+            <File>
+              <FileName>soft_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserSrc\soft_gpio.c</FilePath>
             </File>
           </Files>
         </Group>
