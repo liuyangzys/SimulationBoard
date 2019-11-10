@@ -13,13 +13,13 @@ typedef enum
 
 typedef struct
 {
-    /* CLR 线设置电平，CLR 低电平，则输出强制清零 */
+    /* CLR 线设置电平，CLR 低电平，则输出清零 */
     void (*CLR_SetPin)(uint8_t pinState);
 
-    /* SYNC 线设置电平，SYNC 为 AD5504 的片选线 */
+    /* SYNC 线设置电平，SYNC 为 AD5504 的片选线，进行 SPI 传输时拉低 */
     void (*SYNC_SetPin)(uint8_t pinState);
 
-    /* LDAC 线设置电平，LDAC 为低时输出的模拟电压将刷新为寄存器中收到的值 */
+    /* LDAC 线设置电平，LDAC 为输出刷新线，拉低则将模拟口输出电压刷新为寄存器的值 */
     void (*LDAC_SetPin)(uint8_t pinState);
 
     void (*delay_us)(uint32_t ms);

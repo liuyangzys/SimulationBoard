@@ -2,7 +2,7 @@
 #include "gpio.h"
 #include "driver_74hc595d.h"
 
-uint8_t hc595d_databyte = 0;
+uint8_t hc595d_databyte = 0XFF;
 
 /**
  * @brief 读取 GPIO 输入的电平状态

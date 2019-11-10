@@ -17,12 +17,12 @@ static void AD5504_LDAC_SetState(uint8_t state)
     switch (state)
     {
     case 1:
-        hc595d_databyte |= (1 << 6);
+        hc595d_databyte |= (1 << 4);
         HC595D_SendByte(hc595d_databyte);
         HC595D_CS();
         break;
     case 0:
-        hc595d_databyte &= ~(1 << 6);
+        hc595d_databyte &= ~(1 << 4);
         HC595D_SendByte(hc595d_databyte);
         HC595D_CS();
         break;
@@ -65,12 +65,12 @@ static void AD5504_CLR_SetState(uint8_t state)
     switch (state)
     {
     case 1:
-        hc595d_databyte |= (1 << 4);
+        hc595d_databyte |= (1 << 6);
         HC595D_SendByte(hc595d_databyte);
         HC595D_CS();
         break;
     case 0:
-        hc595d_databyte &= ~(1 << 4);
+        hc595d_databyte &= ~(1 << 6);
         HC595D_SendByte(hc595d_databyte);
         HC595D_CS();
         break;
@@ -89,12 +89,14 @@ void DAC_InitConfig(void)
     hAD5504.CLR_SetPin = AD5504_CLR_SetState;
     hAD5504.SYNC_SetPin = AD5504_SYNC_SetState;
     hAD5504.delay_us = delay_us;
+
+    /* 参考电压 RSEL 线低电平是 60 V */
     hAD5504.vref_mv = 60000;
 
     hAD5504.LDAC_SetPin(1);
     hAD5504.SYNC_SetPin(1);
     hAD5504.CLR_SetPin(0);
-    delay_ms(5);
+    delay_ms(1);
     hAD5504.CLR_SetPin(1);
 }
 
