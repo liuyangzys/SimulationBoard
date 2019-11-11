@@ -98,6 +98,9 @@ void DAC_InitConfig(void)
     hAD5504.CLR_SetPin(0);
     delay_ms(1);
     hAD5504.CLR_SetPin(1);
+
+    AD5504_CHPowerUp(&hAD5504);
+    delay_ms(1);
 }
 
 /**
@@ -166,3 +169,4 @@ float DAC_GetCHVolt(uint8_t ch)
 
     return voltage;
 }
+

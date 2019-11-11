@@ -33,4 +33,6 @@ void AD5504_SetAnalogVolt(AD5504_HandleType *hAD5504, AD5504_AnalogCH ch,
 
 float AD5504_GetAnalogVolt(AD5504_HandleType *hAD5504, AD5504_AnalogCH ch);
 
+void AD5504_CHPowerUp(AD5504_HandleType* hAD5504);
+
 #endif
