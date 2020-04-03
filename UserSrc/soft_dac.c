@@ -7,6 +7,8 @@
 
 AD5504_HandleType hAD5504;
 
+float dacVolt[4] = {0.0f};
+
 /**
  * @brief AD5504 线设置状态
  *
@@ -130,7 +132,7 @@ void DAC_SetCHVolt(uint8_t ch, float voltage)
         default:
             break;
         }
-
+        dacVolt[ch] = voltage;
         AD5504_SetAnalogVolt(&hAD5504, aCH, voltage);
     }
 }
@@ -141,6 +143,7 @@ void DAC_SetCHVolt(uint8_t ch, float voltage)
  */
 float DAC_GetCHVolt(uint8_t ch)
 {
+    /*
     float voltage = 0.0f;
     AD5504_AnalogCH aCH;
     if (ch < 4)
@@ -166,7 +169,7 @@ float DAC_GetCHVolt(uint8_t ch)
 
         voltage = AD5504_GetAnalogVolt(&hAD5504, aCH);
     }
+    */
 
     return voltage;
 }
-

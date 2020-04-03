@@ -50,7 +50,7 @@ GPIO_PinState GPIO_ReadInput(uint8_t in_ch)
  * @brief 设置 io 输出口电平状态
  * 
  * @param out_ch io 输出口序号，0～3
- * @param state 点评状态
+ * @param state 电平状态
  */
 void GPIO_SetOutput(uint8_t out_ch, GPIO_PinState state)
 {
